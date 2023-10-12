@@ -1,36 +1,36 @@
 import { faker } from "@faker-js/faker";
 
 import {
-  createNotepad,
-  deleteNotepad,
-  listNotepads,
-  readNotepad,
-  updateNotepad,
-} from "./notepad.model.service.mjs";
+  createPost,
+  deletePost,
+  listPosts,
+  readPost,
+  updatePost,
+} from "./post.model.service.mjs";
 
 const defaultLimit = 100;
 
-async function notepadSeed() {
+async function postSeed() {
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
-  console.log(`Vão ser criados ${limit} notepads`);
+  console.log(`Vão ser criados ${limit} posts`);
   for (let i = 0; i < limit; i++) {
-    const notepadData = generateNotepad();
+    const postData = generatePost();
 
-    const notepad = await createNotepad(notepadData);
-    console.log(`Notepad criado com id: ${notepad.id}`);
+    const post = await createPost(postData);
+    console.log(`Post criado com id: ${post.id}`);
   }
 
   console.log("Seed realizado com sucesso!");
 }
 
-function generateNotepad() {
+function generatePost() {
   return {
-    title: faker.lorem.word(4 + Math.round(Math.random() * 5)),
-    subtitle: faker.lorem.words(6 + Math.round(Math.random() * 8)),
-    content: faker.lorem.paragraph(3 + Math.round(Math.random() * 7)),
-    created_at: faker.date.past({ years: 5 }).toJSON,
+    // title: faker.lorem.word(4 + Math.round(Math.random() * 5)),
+    content: faker.lorem.words(5 + Math.round(Math.random() * 6)),
+    // content: faker.lorem.paragraph(3 + Math.round(Math.random() * 7)),
+    // created_at: faker.date.past({ years: 5 }).toJSON,
   };
 }
 
-notepadSeed();
+postSeed();
