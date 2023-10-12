@@ -15,8 +15,8 @@ connectionDataBase.connect((err) => {
   }
 });
 
-const notepadsConnection = connectionDataBase.query(
-  "Select * from notepads",
+const postsConnection = connectionDataBase.query(
+  "Select * from posts",
   (err, results) => {
     if (err) {
       console.error("Erro na consulta ao banco de dados", err);
@@ -33,43 +33,43 @@ const notepadsConnection = connectionDataBase.query(
 const app = express();
 app.use(cors());
 
-const notepadsPath = "data/notepads";
-const notepadLatestIdPath = "data/notepadLatestId.json";
+const postsPath = "data/posts";
+const postLatestIdPath = "data/postLatestId.json";
 
-// export async function listNotepads({ limit, offset }) { - adiciona paginação
-// export async function listNotepads() {
-//   const notepadFiles = await fs.promises.readdir(notepadsPath);
-//   let notepads = [];
-//   for (const notepadFile of notepadFiles) {
-//     const currentNotepad = await jsonService.readJson(
-//       `${notepadsPath}/${notepadFile}`
+// export async function listPosts({ limit, offset }) { - adiciona paginação
+// export async function listPosts() {
+//   const postFiles = await fs.promises.readdir(postsPath);
+//   let posts = [];
+//   for (const postFile of postFiles) {
+//     const currentPost = await jsonService.readJson(
+//       `${postsPath}/${postFile}`
 //     );
-//     notepads.push(currentNotepad);
+//     posts.push(currentPost);
 //   }
 //   return {
-//     // notepads: notepads.slice(offset, offset + limit), - adiciona paginação
-//     notepads,
-//     count: notepads.length,
+//     // posts: posts.slice(offset, offset + limit), - adiciona paginação
+//     posts,
+//     count: posts.length,
 //   };
 // }
 
 // Deu merda na paginação!
-// export async function listNotepads(limit, offset) {
+// export async function listPosts(limit, offset) {
 //   try {
-//     const [notepads] = await connectionDataBase
+//     const [posts] = await connectionDataBase
 //       .promise()
 //       .query(
-//         /* SQL */ `SELECT * FROM notepads ORDER BY id DESC LIMIT ? OFFSET ?`,
+//         /* SQL */ `SELECT * FROM posts ORDER BY id DESC LIMIT ? OFFSET ?`,
 //         [limit, offset]
 //       );
 
 //     const [results] = await connectionDataBase
 //       .promise()
-//       .query(/* SQL */ `SELECT COUNT(id) AS notepad_count FROM notepads`);
+//       .query(/* SQL */ `SELECT COUNT(id) AS post_count FROM posts`);
 
 //     return {
-//       notepads,
-//       count: results[0].notepad_count,
+//       posts,
+//       count: results[0].post_count,
 //     };
 //   } catch (error) {
 //     console.error("Erro na consulta", error);
@@ -77,14 +77,14 @@ const notepadLatestIdPath = "data/notepadLatestId.json";
 //   }
 // }
 
-export async function listNotepads() {
+export async function listPosts() {
   try {
-    const [notepads] = await connectionDataBase
+    const [posts] = await connectionDataBase
       .promise()
-      .query(/* SQL */ `SELECT * FROM notepads ORDER BY id DESC`);
+      .query(/* SQL */ `SELECT * FROM posts ORDER BY id DESC`);
 
     return {
-      notepads,
+      posts,
     };
   } catch (error) {
     console.error("Erro na consulta", error);
@@ -92,31 +92,30 @@ export async function listNotepads() {
   }
 }
 
-export async function createNotepad(data) {
-  // const { notepadLatestId } = await jsonService.readJson(notepadLatestIdPath);
-  // const notepadId = notepadLatestId + 1;
-  // const nextNotepad = {
+export async function createPost(data) {
+  // const { postLatestId } = await jsonService.readJson(postLatestIdPath);
+  // const postId = postLatestId + 1;
+  // const nextPost = {
   //   createdAt: new Date().toJSON(),
-  //   id: notepadId,
+  //   id: postId,
   //   ...data,
   // };
-  // const path = `${notepadsPath}/${nextNotepad.id}.json`;
-  // await jsonService.createJson(path, nextNotepad);
-  // await jsonService.updateJson(notepadLatestIdPath, {
-  //   notepadLatestId: notepadId,
+  // const path = `${postsPath}/${nextPost.id}.json`;
+  // await jsonService.createJson(path, nextPost);
+  // await jsonService.updateJson(postLatestIdPath, {
+  //   postLatestId: postId,
   // });
   // const response = connectionDataBase
   //   .query(
   //     /*SQL*/ `
-  //     */ INSERT INTO notepads (title, subtitle, content) VALUES (?, ?, ?);`
+  //     */ INSERT INTO posts (title, subtitle, content) VALUES (?, ?, ?);`
   //   )
   //   .start(data.title, data.subtitle, data.content);
   // return response;
 
   try {
-    const query =
-      "INSERT INTO notepads (title, subtitle, content) VALUES (?, ?, ?)";
-    const values = [data.title, data.subtitle, data.content];
+    const query = "INSERT INTO posts (content) VALUES (?)";
+    const values = [data.content];
 
     await connectionDataBase.promise().query(query, values);
 
@@ -128,7 +127,7 @@ export async function createNotepad(data) {
 
     const [result] = await connectionDataBase
       .promise()
-      .query("SELECT * FROM notepads WHERE id = ?", [lastInsertId]);
+      .query("SELECT * FROM posts WHERE id = ?", [lastInsertId]);
 
     if (result.length === 1) {
       return result[0];
@@ -141,21 +140,21 @@ export async function createNotepad(data) {
   }
 }
 
-// export async function readNotepad(id) {
-//   // const notepad = await jsonService.readJson(`${notepadsPath}/${id}.json`);
-//   // return notepad;
-//   const notepad = connectionDataBase.query(
-//     "Select * from notepads where id=?",
+// export async function readPost(id) {
+//   // const post = await jsonService.readJson(`${postsPath}/${id}.json`);
+//   // return post;
+//   const post = connectionDataBase.query(
+//     "Select * from posts where id=?",
 //     [id]
 //   );
-//   return notepad;
+//   return post;
 // }
 
-export async function readNotepad(id) {
+export async function readPost(id) {
   try {
     const [rows] = await connectionDataBase.promise().query(
       /*SQL*/
-      `SELECT * FROM notepads WHERE id = ?`,
+      `SELECT * FROM posts WHERE id = ?`,
       [id]
     );
 
@@ -163,30 +162,29 @@ export async function readNotepad(id) {
       return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
     }
 
-    const notepad = rows[0];
-    return notepad;
+    const post = rows[0];
+    return post;
   } catch (error) {
     console.error("Erro na consulta:", error);
     throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
   }
 }
 
-export async function updateNotepad(id, data) {
-  // const path = `${notepadsPath}/${id}.json`;
+export async function updatePost(id, data) {
+  // const path = `${postsPath}/${id}.json`;
   // await jsonService.updateJson(path, data);
-  // const notepad = await jsonService.readJson(path);
-  // return notepad;
+  // const post = await jsonService.readJson(path);
+  // return post;
   try {
-    const query =
-      "UPDATE notepads SET title = ?, subtitle = ?, content = ? WHERE id = ?;";
-    const values = [data.title, data.subtitle, data.content, id];
+    const query = "UPDATE posts SET content = ? WHERE id = ?;";
+    const values = [data.content, id];
 
     const [result] = await connectionDataBase.promise().query(query, values);
 
     if (result.affectedRows === 1) {
-      return "O notepad foi atualizado com sucesso!";
+      return "O post foi atualizado com sucesso!";
     } else {
-      return "Erro ao atualizar o notepad!";
+      return "Erro ao atualizar o post!";
     }
   } catch (error) {
     console.error("Erro na consulta", error);
@@ -194,14 +192,14 @@ export async function updateNotepad(id, data) {
   }
 }
 
-export async function deleteNotepad(id) {
-  // const path = `${notepadsPath}/${id}.json`;
-  // const notepad = await jsonService.readJson(path);
+export async function deletePost(id) {
+  // const path = `${postsPath}/${id}.json`;
+  // const post = await jsonService.readJson(path);
   // await jsonService.deleteJson(path);
-  // return notepad; // Quando deleta-se um recurso, normalmente se retorna esse esse recurso deletado
+  // return post; // Quando deleta-se um recurso, normalmente se retorna esse esse recurso deletado
 
   try {
-    const query = "DELETE FROM notepads WHERE id = ?";
+    const query = "DELETE FROM posts WHERE id = ?";
     const values = [id];
 
     const [result] = await connectionDataBase.promise().query(query, values);
