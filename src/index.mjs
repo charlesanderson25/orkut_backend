@@ -1,5 +1,5 @@
 import express from "express";
-import notepadController from "./notepad/notepad.controller.mjs";
+import postController from "./post/post.controller.mjs";
 import cors from "cors";
 import { connectionDataBase } from "./db.mjs";
 
@@ -15,10 +15,8 @@ app.use(
   })
 );
 
-app.use("/notepads", notepadController);
+app.use("/posts", postController);
 
 app.listen(port, host, () => {
   console.log(`Servidor express iniciado em: http://${host}:${port}`);
 });
-
-//copy
