@@ -1,55 +1,55 @@
 import express from "express";
 import {
-  createNotepad,
-  deleteNotepad,
-  listNotepads,
-  readNotepad,
-  updateNotepad,
-} from "./notepad.model.service.mjs";
+  createPost,
+  deletePost,
+  listPosts,
+  readPost,
+  updatePost,
+} from "./post.model.service.mjs";
 import cors from "cors";
 
 const app = express();
 app.use(cors());
 
-const notepadController = express.Router();
+const postController = express.Router();
 
-notepadController.get("/", async (req, res) => {
+postController.get("/", async (req, res) => {
   // const limit = Number(req.query.limit) ?? 30; - adiciona paginação
   // const offset = Number(req.query.offset) ?? 0;
   // console.log(limit, typeof limit);
   // console.log(offset, typeof offset);
-  // const notepads = await listNotepads({ limit, offset });
-  const notepads = await listNotepads();
-  res.status(200).json(notepads);
+  // const posts = await listPosts({ limit, offset });
+  const posts = await listPosts();
+  res.status(200).json(posts);
 });
 
-//Read Notepad
-notepadController.get("/:id", async (req, res) => {
-  const notepadId = req.params.id;
-  const notepad = await readNotepad(notepadId);
-  res.status(200).json(notepad);
+//Read Post
+postController.get("/:id", async (req, res) => {
+  const postId = req.params.id;
+  const post = await readPost(postId);
+  res.status(200).json(post);
 });
 
-//Create Notepad
+//Create Post
 
-notepadController.post("/", async (req, res) => {
-  const notepadData = req.body;
-  const notepad = await createNotepad(notepadData);
-  res.status(200).json(notepad);
+postController.post("/", async (req, res) => {
+  const postData = req.body;
+  const post = await createPost(postData);
+  res.status(200).json(post);
 });
 
-// Delete Notepad
-notepadController.delete("/:id", async (req, res) => {
-  const notepadId = req.params.id;
-  const notepad = await deleteNotepad(notepadId);
-  res.status(200).json(notepad);
+// Delete Post
+postController.delete("/:id", async (req, res) => {
+  const postId = req.params.id;
+  const post = await deletePost(postId);
+  res.status(200).json(post);
 });
 
-notepadController.put("/:id", async (req, res) => {
-  const notepadData = req.body;
-  const notepadId = req.params.id;
-  const notepad = await updateNotepad(notepadId, notepadData);
-  res.status(200).json(notepad);
+postController.put("/:id", async (req, res) => {
+  const postData = req.body;
+  const postId = req.params.id;
+  const post = await updatePost(postId, postData);
+  res.status(200).json(post);
 });
 
-export default notepadController;
+export default postController;
