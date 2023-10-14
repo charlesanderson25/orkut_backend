@@ -9,6 +9,22 @@ PRIMARY KEY (ID)
 
 ALTER TABLE notepads MODIFY COLUMN id INT UNSIGNED NOT NULL AUTO_INCREMENT;
 
-INSERT INTO notepads (title, subtitle, content) VALUES ('Titulo 2', 'Subtitulo 2', 'Conteúdo 2');
+INSERT INTO notepads (title, subtitle, content) VALUES ('Titulo 2', 'Subtitulo 2', 'Conteúdo 2') RETURNING *;
 
 ALTER TABLE notepads ADD `created_at` timestamp DEFAULT CURRENT_TIMESTAMP;
+
+DELETE FROM notepads WHERE id = 1;
+
+UPDATE notepads
+SET 
+title = ?,
+subtitle = ?,
+content = ?
+WHERE id = ?;
+
+CREATE TABLE posts AS SELECT * FROM notepads;
+
+ALTER TABLE posts DROP COLUMN title, DROP COLUMN subtitle;
+
+ALTER TABLE posts MODIFY id INT AUTO_INCREMENT;
+ALTER TABLE posts ADD PRIMARY KEY (id);
