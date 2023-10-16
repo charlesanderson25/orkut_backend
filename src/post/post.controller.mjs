@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createPost,
+  createPostComment,
   deletePost,
   listPostComments,
   listPosts,
@@ -60,7 +61,7 @@ postController.get("/:id/comments", async (req, res) => {
 postController.post("/:id/comments", async (req, res) => {
   const postId = req.params.id;
   const commentData = req.body;
-  const comment = await createPost(postId, commentData);
+  const comment = await createPostComment(postId, commentData);
   res.status(201).json(comment);
 });
 
