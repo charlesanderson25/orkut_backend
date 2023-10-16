@@ -48,11 +48,20 @@ postController.put("/:id", async (req, res) => {
   res.status(200).json(post);
 });
 
-// Recebe os comentários
+// Lista comentários
 postController.get("/:id/comments", async (req, res) => {
   const postId = req.params.id;
   const comments = await listPostComments(postId);
   res.status(200).json(comments);
+});
+
+//Adiciona comentários
+
+postController.post("/:id/comments", async (req, res) => {
+  const postId = req.params.id;
+  const commentData = req.body;
+  const comment = await createPost(postId, commentData);
+  res.status(201).json(comment);
 });
 
 export default postController;
