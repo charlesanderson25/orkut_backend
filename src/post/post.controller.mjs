@@ -14,11 +14,6 @@ app.use(cors());
 const postController = express.Router();
 
 postController.get("/", async (req, res) => {
-  // const limit = Number(req.query.limit) ?? 30; - adiciona paginação
-  // const offset = Number(req.query.offset) ?? 0;
-  // console.log(limit, typeof limit);
-  // console.log(offset, typeof offset);
-  // const posts = await listPosts({ limit, offset });
   const posts = await listPosts();
   res.status(200).json(posts);
 });
