@@ -154,16 +154,38 @@ export async function listPostComments(id) {
   }
 }
 
+// export async function createPostComment(postId, message) {
+//   try {
+//     const query =
+//       "insert into comments (message, post_id) values (?, ?) returning *";
+//     const values = [postId, message];
+
+//     const [result] = await connectionDataBase.promise().query(query, values);
+
+//     if (result.length > 0) {
+//       return result;
+//     } else {
+//       return "Erro ao incluir os dados, por favor, verifique a query!";
+//     }
+//   } catch (error) {
+//     console.error("Erro na consulta", error);
+//     throw error;
+//   }
+// }
+
 export async function createPostComment(postId, message) {
   try {
-    const query =
-      "insert into comments (message, post_id) values (?, ?) returning *";
-    const values = [postId, message];
+    const query = "INSERT INTO comments (message, post_id) VALUES(?, ?)";
+    const values = [message, postId];
 
-    const [result] = await connectionDataBase.promise().query(query, values);
+    await connectionDataBase.promise().query(query, values);
 
-    if (result.length > 0) {
-      return result;
+    const [lastInsertResult] = await connectionDataBase
+      .promise()
+      .query("SELECT * FROM comments WHERE id = last_insert_id()");
+
+    if (lastInsertResult.length === 1) {
+      return lastInsertResult[0];
     } else {
       return "Erro ao incluir os dados, por favor, verifique a query!";
     }
