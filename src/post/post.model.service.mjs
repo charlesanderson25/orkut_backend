@@ -36,47 +36,6 @@ app.use(cors());
 const postsPath = "data/posts";
 const postLatestIdPath = "data/postLatestId.json";
 
-// export async function listPosts({ limit, offset }) { - adiciona paginação
-// export async function listPosts() {
-//   const postFiles = await fs.promises.readdir(postsPath);
-//   let posts = [];
-//   for (const postFile of postFiles) {
-//     const currentPost = await jsonService.readJson(
-//       `${postsPath}/${postFile}`
-//     );
-//     posts.push(currentPost);
-//   }
-//   return {
-//     // posts: posts.slice(offset, offset + limit), - adiciona paginação
-//     posts,
-//     count: posts.length,
-//   };
-// }
-
-// Deu merda na paginação!
-// export async function listPosts(limit, offset) {
-//   try {
-//     const [posts] = await connectionDataBase
-//       .promise()
-//       .query(
-//         /* SQL */ `SELECT * FROM posts ORDER BY id DESC LIMIT ? OFFSET ?`,
-//         [limit, offset]
-//       );
-
-//     const [results] = await connectionDataBase
-//       .promise()
-//       .query(/* SQL */ `SELECT COUNT(id) AS post_count FROM posts`);
-
-//     return {
-//       posts,
-//       count: results[0].post_count,
-//     };
-//   } catch (error) {
-//     console.error("Erro na consulta", error);
-//     throw error;
-//   }
-// }
-
 export async function listPosts() {
   try {
     const [posts] = await connectionDataBase
@@ -93,26 +52,6 @@ export async function listPosts() {
 }
 
 export async function createPost(data) {
-  // const { postLatestId } = await jsonService.readJson(postLatestIdPath);
-  // const postId = postLatestId + 1;
-  // const nextPost = {
-  //   createdAt: new Date().toJSON(),
-  //   id: postId,
-  //   ...data,
-  // };
-  // const path = `${postsPath}/${nextPost.id}.json`;
-  // await jsonService.createJson(path, nextPost);
-  // await jsonService.updateJson(postLatestIdPath, {
-  //   postLatestId: postId,
-  // });
-  // const response = connectionDataBase
-  //   .query(
-  //     /*SQL*/ `
-  //     */ INSERT INTO posts (title, subtitle, content) VALUES (?, ?, ?);`
-  //   )
-  //   .start(data.title, data.subtitle, data.content);
-  // return response;
-
   try {
     const query = "INSERT INTO posts (content) VALUES (?)";
     const values = [data.content];
@@ -140,16 +79,6 @@ export async function createPost(data) {
   }
 }
 
-// export async function readPost(id) {
-//   // const post = await jsonService.readJson(`${postsPath}/${id}.json`);
-//   // return post;
-//   const post = connectionDataBase.query(
-//     "Select * from posts where id=?",
-//     [id]
-//   );
-//   return post;
-// }
-
 export async function readPost(id) {
   try {
     const [rows] = await connectionDataBase.promise().query(
@@ -171,10 +100,6 @@ export async function readPost(id) {
 }
 
 export async function updatePost(id, data) {
-  // const path = `${postsPath}/${id}.json`;
-  // await jsonService.updateJson(path, data);
-  // const post = await jsonService.readJson(path);
-  // return post;
   try {
     const query = "UPDATE posts SET content = ? WHERE id = ?;";
     const values = [data.content, id];
@@ -193,11 +118,6 @@ export async function updatePost(id, data) {
 }
 
 export async function deletePost(id) {
-  // const path = `${postsPath}/${id}.json`;
-  // const post = await jsonService.readJson(path);
-  // await jsonService.deleteJson(path);
-  // return post; // Quando deleta-se um recurso, normalmente se retorna esse esse recurso deletado
-
   try {
     const query = "DELETE FROM posts WHERE id = ?";
     const values = [id];
