@@ -2,6 +2,7 @@ import express from "express";
 import {
   createPost,
   deletePost,
+  listPostComments,
   listPosts,
   readPost,
   updatePost,
@@ -45,6 +46,13 @@ postController.put("/:id", async (req, res) => {
   const postId = req.params.id;
   const post = await updatePost(postId, postData);
   res.status(200).json(post);
+});
+
+// Recebe os comentários
+postController.get("/:id/comments", async (req, res) => {
+  const postId = req.params.id;
+  const comments = await listPostComments(postId);
+  res.status(200).json(comments);
 });
 
 export default postController;
