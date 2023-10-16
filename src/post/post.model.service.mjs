@@ -4,6 +4,7 @@ import cors from "cors";
 import express from "express";
 import { connectionDataBase } from "../db.mjs";
 import { error } from "console";
+import { isAsyncFunction } from "util/types";
 
 //Teste conexão banco de dados **********************************************
 
@@ -127,6 +128,44 @@ export async function deletePost(id) {
       return "Registro excluído com sucesso!";
     } else {
       return "Nenhum registro excluído, verifique o ID.";
+    }
+  } catch (error) {
+    console.error("Erro na consulta", error);
+    throw error;
+  }
+}
+
+export async function listPostComments(id) {
+  try {
+    const query =
+      "Select id, message, created_at from comments where post_id = ?";
+    const values = [id];
+
+    const [result] = await connectionDataBase.promise().query(query, values);
+
+    if (result.length > 0) {
+      return result;
+    } else {
+      return "Nenhum comentário encontrado para o post com o ID fornecido.";
+    }
+  } catch (error) {
+    console.error("Erro na consulta", error);
+    throw error;
+  }
+}
+
+export async function createPostComment(postId, message) {
+  try {
+    const query =
+      "insert into comments (message, post_id) values (?, ?) returning *";
+    const values = [postId, message];
+
+    const [result] = await connectionDataBase.promise().query(query, values);
+
+    if (result.length > 0) {
+      return result;
+    } else {
+      return "Erro ao incluir os dados, por favor, verifique a query!";
     }
   } catch (error) {
     console.error("Erro na consulta", error);
