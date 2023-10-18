@@ -16,6 +16,7 @@ const commentRange = 12;
 
 async function postSeed() {
   const users = await userModelService.readAllUsers();
+  const usersIds = users.map((user) => user.id);
 
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
