@@ -138,7 +138,7 @@ export async function deletePost(id) {
 export async function listPostComments(id) {
   try {
     const query =
-      "Select id, message, created_at from comments where post_id = ?";
+      "Select id, message, created_at from comments where post_id = ? order by created_at desc";
     const values = [id];
 
     const [result] = await connectionDataBase.promise().query(query, values);
