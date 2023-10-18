@@ -32,3 +32,23 @@ export async function createUser(data) {
     throw error;
   }
 }
+
+export async function readUser(id) {
+  try {
+    const [rows] = await connectionDataBase.promise().query(
+      /*SQL*/
+      `SELECT * FROM users WHERE id = ?`,
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return null; // Retorna null se nenhum registro for encontrado com o ID fornecido
+    }
+
+    const user = rows[0];
+    return user;
+  } catch (error) {
+    console.error("Erro na consulta:", error);
+    throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
+  }
+}
