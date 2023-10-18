@@ -52,3 +52,15 @@ export async function readUser(id) {
     throw error; // Propaga o erro para ser tratado em um nível superior, se necessário
   }
 }
+
+export async function readAllUsers() {
+  try {
+    const queryCode = /*SQL*/ `SELECT * FROM users`;
+    const [rows] = await connectionDataBase.promise().query(queryCode);
+
+    return rows;
+  } catch (error) {
+    console.error("Erro na consulta", error);
+    throw error;
+  }
+}
