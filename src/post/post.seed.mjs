@@ -42,8 +42,9 @@ async function commentSeed(post) {
   }
 }
 
-function generatePost() {
+function generatePost(user_id) {
   return {
+    user_id,
     // title: faker.lorem.word(4 + Math.round(Math.random() * 5)),
     content: faker.lorem.words(5 + Math.round(Math.random() * 6)),
     // content: faker.lorem.paragraph(3 + Math.round(Math.random() * 7)),
@@ -51,8 +52,9 @@ function generatePost() {
   };
 }
 
-function generateComment() {
+function generateComment(user_id) {
   return {
+    user_id,
     message: faker.lorem.words(2 + Math.round(Math.random() * 5)),
   };
 }
