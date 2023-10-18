@@ -13,3 +13,5 @@ ALTER TABLE comments ADD CONSTRAINT FK_comments_post FOREIGN KEY (post_id) REFER
 ALTER TABLE comments ADD CONSTRAINT FK_comments_post FOREIGN KEY (post_id) REFERENCES posts (id) ON DELETE cascade; // não funcionou!
 
 INSERT INTO comments (message, post_id) VALUES ('Teste 1', 110);
+
+ALTER TABLE comments ADD COLUMN user_id INT REFERENCES users(id);
