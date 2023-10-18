@@ -15,28 +15,30 @@ const minCommentCount = 3;
 const commentRange = 12;
 
 async function postSeed() {
-  const users = await userModelService.readAllUsers();
+  const users = await readAllUsers();
   const usersIds = users.map((user) => user.id);
 
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
   console.log(`Vão ser criados ${limit} posts`);
   for (let i = 0; i < limit; i++) {
-    const postData = generatePost();
+    const userId = getRandomUserId(usersIds);
+    const postData = generatePost(userId);
 
     const post = await createPost(postData);
 
-    await commentSeed(post);
+    await commentSeed(post, usersIds);
   }
 
   console.log("Seed realizado com sucesso!");
 }
 
-async function commentSeed(post) {
+async function commentSeed(post, usersIds) {
   const commentCount =
     minCommentCount + Math.round(Math.random() * commentRange);
   for (let index = 0; index < commentCount; index++) {
-    const comment = generateComment();
+    const userId = getRandomUserId(usersIds);
+    const comment = generateComment(userId);
     const addedComment = await createPostComment(post.id, comment);
     console.log(`Post criado com id: ${addedComment.id}`);
   }
@@ -57,6 +59,10 @@ function generateComment(user_id) {
     user_id,
     message: faker.lorem.words(2 + Math.round(Math.random() * 5)),
   };
+}
+
+function getRandomUserId(usersId) {
+  return usersId[Math.floor(Math.random() * usersId.length)];
 }
 
 postSeed();
