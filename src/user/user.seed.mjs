@@ -1,4 +1,23 @@
 import { faker } from "@faker-js/faker";
+import { createUser } from "./user.model.service.mjs";
+
+const defaultLimit = 100;
+
+async function seedUser() {
+  const limit = Number(process.argv[2] ?? defaultLimit);
+  console.log("Iniciando seed...");
+  console.log(`Vão ser criados ${limit} users`);
+  for (let i = 0; i < limit; i++) {
+    const userData = generateUser();
+
+    const user = await createUser(userData);
+    console.log(`Criado usuário de id#${user.id}`);
+
+    // await commentSeed(user);
+  }
+
+  console.log("Seed realizado com sucesso!");
+}
 
 function generateUser() {
   return {
@@ -8,3 +27,5 @@ function generateUser() {
     pass_word: faker.internet.password(),
   };
 }
+
+seedUser();
