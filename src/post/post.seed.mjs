@@ -8,12 +8,15 @@ import {
   readPost,
   updatePost,
 } from "./post.model.service.mjs";
+import { readAllUsers } from "../user/user.model.service.mjs";
 
 const defaultLimit = 100;
 const minCommentCount = 3;
 const commentRange = 12;
 
 async function postSeed() {
+  const users = await userModelService.readAllUsers();
+
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
   console.log(`Vão ser criados ${limit} posts`);
