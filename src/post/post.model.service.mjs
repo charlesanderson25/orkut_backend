@@ -173,10 +173,11 @@ export async function listPostComments(id) {
 //   }
 // }
 
-export async function createPostComment(postId, message) {
+export async function createPostComment(postId, message, userId) {
   try {
-    const query = "INSERT INTO comments (message, post_id) VALUES(?, ?)";
-    const values = [message, postId];
+    const query =
+      "INSERT INTO comments (message, post_id, user_id) VALUES(?, ?, ?)";
+    const values = [message, postId, userId];
 
     await connectionDataBase.promise().query(query, values);
 
