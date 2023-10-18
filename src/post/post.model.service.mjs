@@ -54,7 +54,7 @@ export async function listPosts() {
 
 export async function createPost(data) {
   try {
-    const query = "INSERT INTO posts (content) VALUES (?)";
+    const query = "INSERT INTO posts (content, user_id) VALUES (?, ?)";
     const values = [data.content];
 
     await connectionDataBase.promise().query(query, values);
