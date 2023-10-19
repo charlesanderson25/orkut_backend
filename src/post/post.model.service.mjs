@@ -175,7 +175,17 @@ export async function deletePost(id) {
 export async function listPostComments(id) {
   try {
     const query =
-      "Select id, message, created_at from comments where post_id = ? order by created_at desc";
+      /*SQL*/
+      `Select 
+        comments.id,
+        comments.message,
+        comments.created_at, 
+        comments.user_id,
+        users.first_name as user_first_name,
+        users.last_name as user_last_name, 
+        users.avatar as user_avatar 
+      from comments inner join users on comments.user_id = users.id
+      where post_id = ? order by comments.created_at desc`;
     const values = [id];
 
     const [result] = await connectionDataBase.promise().query(query, values);
