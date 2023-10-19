@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.mjs",
     "seed:post": "node src/post/post.seed.mjs",
-    "seed:user": "node src/user/user.seed.mjs"
+    "seed:user": "node src/user/user.seed.mjs",
+    "user:service": "node src/user/user.model.service.mjs"
   },
   "repository": {
     "type": "git",
