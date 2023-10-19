@@ -39,9 +39,18 @@ const postLatestIdPath = "data/postLatestId.json";
 
 export async function listPosts() {
   try {
-    const [posts] = await connectionDataBase
-      .promise()
-      .query(/* SQL */ `SELECT * FROM posts ORDER BY id DESC`);
+    const [posts] = await connectionDataBase.promise().query(/* SQL */ `
+    SELECT 
+        posts.id,
+        posts.content,
+        posts.created_at, 
+        posts.user_id,
+        users.first_name as user_first_name,
+        users.last_name as user_last_name, 
+        users.avatar as user_avatar
+    FROM posts
+    INNER JOIN users ON posts.user_id = users.id
+    ORDER BY posts.id DESC;`);
 
     return {
       posts,
