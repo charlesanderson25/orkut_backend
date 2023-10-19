@@ -7,7 +7,7 @@ async function seedUser() {
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
   console.log(`Vão ser criados ${limit} users`);
-  for (let i = 0; i < limit; i++) {
+  for (let index = 0; index < limit; index++) {
     const userData = generateUser();
 
     const user = await createUser(userData);
