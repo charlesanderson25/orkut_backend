@@ -8,24 +8,26 @@ import {
   readPost,
   updatePost,
 } from "./post.model.service.mjs";
-import { readAllUsers } from "../user/user.model.service.mjs";
+import { listAllUsers } from "../user/user.model.service.mjs";
 
 const defaultLimit = 100;
 const minCommentCount = 3;
 const commentRange = 12;
 
 async function postSeed() {
-  const users = await readAllUsers();
+  const users = await listAllUsers();
   const usersIds = users.map((user) => user.id);
-
+  console.log(usersIds);
   const limit = Number(process.argv[2] ?? defaultLimit);
   console.log("Iniciando seed...");
   console.log(`Vão ser criados ${limit} posts`);
-  for (let i = 0; i < limit; i++) {
+  for (let index = 0; index < limit; index++) {
     const userId = getRandomUserId(usersIds);
+    console.log(userId);
     const postData = generatePost(userId);
 
     const post = await createPost(postData);
+    console.log(`Criado post de id #${post.id}`);
 
     await commentSeed(post, usersIds);
   }
@@ -39,7 +41,11 @@ async function commentSeed(post, usersIds) {
   for (let index = 0; index < commentCount; index++) {
     const userId = getRandomUserId(usersIds);
     const comment = generateComment(userId);
-    const addedComment = await createPostComment(post.id, comment);
+    const addedComment = await createPostComment(
+      post.id,
+      comment.message,
+      comment.user_id
+    );
     console.log(`Post criado com id: ${addedComment.id}`);
   }
 }
