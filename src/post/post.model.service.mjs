@@ -38,7 +38,6 @@ const postsPath = "data/posts";
 const postLatestIdPath = "data/postLatestId.json";
 
 export async function listPosts(orderBy, search) {
-  // console.log(orderBy, search);
   try {
     const validOrderBy = orderBy === "asc" ? "ASC" : "DESC";
     const [posts] = await connectionDataBase.promise().query(/* SQL */ `
@@ -52,7 +51,7 @@ export async function listPosts(orderBy, search) {
         users.avatar as user_avatar
     FROM posts
     INNER JOIN users ON posts.user_id = users.id
-    ORDER BY posts.id ${validOrderBy};`);
+    ORDER BY posts.created_at ${validOrderBy};`);
 
     return {
       posts,
