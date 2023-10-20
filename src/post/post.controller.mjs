@@ -16,7 +16,9 @@ app.use(cors());
 const postController = express.Router();
 
 postController.get("/", async (req, res) => {
-  const posts = await listPosts();
+  const orderBy = req.query.order_by || "desc";
+  const search = req.query.search || null;
+  const posts = await listPosts(orderBy, search);
   res.status(200).json(posts);
 });
 
