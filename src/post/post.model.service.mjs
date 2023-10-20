@@ -290,3 +290,29 @@ export async function createPostComment(postId, message, userId) {
     throw error;
   }
 }
+
+export async function addFriend(userA, userB) {
+  try {
+    const query = /*SQL*/ `
+      INSERT INTO friends (user_a, user_b)
+      VALUES (?, ?);
+    `;
+
+    const values = [userA, userB];
+
+    await connectionDataBase.promise().query(query, values);
+
+    const [lastInsertResult] = await connectionDataBase
+      .promise()
+      .query("SELECT * FROM friends WHERE id = LAST_INSERT_ID()");
+
+    if (lastInsertResult.length === 1) {
+      return lastInsertResult[0];
+    } else {
+      return "Erro ao incluir os dados, por favor, verifique a query!";
+    }
+  } catch (error) {
+    console.error("Erro na consulta", error);
+    throw error;
+  }
+}
