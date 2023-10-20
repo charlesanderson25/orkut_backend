@@ -1,4 +1,4 @@
-import { listAllUsers } from "../user/user.model.service.mjs";
+import { addFriend, listAllUsers } from "../user/user.model.service.mjs";
 
 const minFriendsCount = 12;
 const friendsRange = 15;
@@ -33,7 +33,11 @@ async function seedFriend() {
       });
     }
   }
-  console.log(friendships);
+  for (const { userA, userB } of friendships) {
+    await addFriend(userA, userB);
+    console.log(`Usuário #${userA} adicionou #${userB}`);
+  }
+  console.log("Seeding realizado com sucesso!");
 }
 
 seedFriend();
