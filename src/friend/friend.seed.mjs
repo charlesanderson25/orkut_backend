@@ -23,13 +23,13 @@ async function seedFriend() {
         randomId === id ||
         friendships.some(
           (friend) =>
-            (friend.user_a === id && friend.user_b === randomId) ||
-            (friend.user_a === randomId && friend.user_b === id)
+            (friend.userA === id && friend.userB === randomId) ||
+            (friend.userA === randomId && friend.userB === id)
         )
       );
       friendships.push({
-        user_a: id,
-        user_b: randomId,
+        userA: id,
+        userB: randomId,
       });
     }
   }
