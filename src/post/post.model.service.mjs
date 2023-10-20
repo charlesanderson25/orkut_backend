@@ -37,8 +37,10 @@ app.use(cors());
 const postsPath = "data/posts";
 const postLatestIdPath = "data/postLatestId.json";
 
-export async function listPosts() {
+export async function listPosts(orderBy, search) {
+  // console.log(orderBy, search);
   try {
+    const validOrderBy = orderBy === "asc" ? "ASC" : "DESC";
     const [posts] = await connectionDataBase.promise().query(/* SQL */ `
     SELECT 
         posts.id,
@@ -50,7 +52,7 @@ export async function listPosts() {
         users.avatar as user_avatar
     FROM posts
     INNER JOIN users ON posts.user_id = users.id
-    ORDER BY posts.id DESC;`);
+    ORDER BY posts.id ${validOrderBy};`);
 
     return {
       posts,
@@ -60,34 +62,6 @@ export async function listPosts() {
     throw error;
   }
 }
-
-// export async function createPost(data) {
-//   try {
-//     const query = "INSERT INTO posts (content, user_id) VALUES (?, ?)";
-//     const values = [data.content];
-
-//     await connectionDataBase.promise().query(query, values);
-
-//     const [lastInsertResult] = await connectionDataBase
-//       .promise()
-//       .query("SELECT LAST_INSERT_ID() as lastInsertId");
-
-//     const lastInsertId = lastInsertResult[0].lastInsertId;
-
-//     const [result] = await connectionDataBase
-//       .promise()
-//       .query("SELECT * FROM posts WHERE id = ?", [lastInsertId]);
-
-//     if (result.length === 1) {
-//       return result[0];
-//     } else {
-//       return "Nenhum registro inserido, por favor verifique!";
-//     }
-//   } catch (error) {
-//     console.error("Erro na consulta", error);
-//     throw error;
-//   }
-// }
 
 export async function createPost(data) {
   try {
@@ -200,48 +174,6 @@ export async function listPostComments(id) {
     throw error;
   }
 }
-
-// export async function createPostComment(postId, message) {
-//   try {
-//     const query =
-//       "insert into comments (message, post_id) values (?, ?) returning *";
-//     const values = [postId, message];
-
-//     const [result] = await connectionDataBase.promise().query(query, values);
-
-//     if (result.length > 0) {
-//       return result;
-//     } else {
-//       return "Erro ao incluir os dados, por favor, verifique a query!";
-//     }
-//   } catch (error) {
-//     console.error("Erro na consulta", error);
-//     throw error;
-//   }
-// }
-
-// export async function createPostComment(postId, message, userId) {
-//   try {
-//     const query =
-//       "INSERT INTO comments (message, post_id, user_id) VALUES(?, ?, ?)";
-//     const values = [message, postId, userId];
-
-//     await connectionDataBase.promise().query(query, values);
-
-//     const [lastInsertResult] = await connectionDataBase
-//       .promise()
-//       .query("SELECT * FROM comments WHERE id = last_insert_id()");
-
-//     if (lastInsertResult.length === 1) {
-//       return lastInsertResult[0];
-//     } else {
-//       return "Erro ao incluir os dados, por favor, verifique a query!";
-//     }
-//   } catch (error) {
-//     console.error("Erro na consulta", error);
-//     throw error;
-//   }
-// }
 
 // export async function createPostComment(postId, message, userId) {
 //   try {
