@@ -128,3 +128,31 @@ export async function addFriend(userA, userB) {
     throw error;
   }
 }
+
+export async function listLatestFriends(userId) {
+  try {
+    const query = /*SQL*/ `
+      SELECT u.*
+      FROM users u
+      WHERE u.id IN (
+        SELECT f.user_b
+        FROM friends f
+        WHERE f.user_a = ?
+        UNION
+        SELECT f.user_a
+        FROM friends f
+        WHERE f.user_b = ?
+      )
+      ORDER BY u.created_at DESC
+      LIMIT 9;
+    `;
+
+    const [rows] = await connectionDataBase
+      .promise()
+      .query(query, [userId, userId]);
+    return rows;
+  } catch (error) {
+    console.error("Erro na consulta", error);
+    throw error;
+  }
+}
