@@ -60,11 +60,22 @@ function generatePost(user_id) {
   };
 }
 
+// function generateComment(user_id) {
+//   return {
+//     user_id,
+//     message: faker.lorem.words(2 + Math.round(Math.random() * 5)),
+//   };
+// }
+
 function generateComment(user_id) {
-  return {
+  const comment = {
     user_id,
     message: faker.lorem.words(2 + Math.round(Math.random() * 5)),
   };
+
+  console.log("Generated comment:", comment.message); // Adicione esta linha para depuração
+
+  return comment;
 }
 
 function getRandomUserId(usersId) {
