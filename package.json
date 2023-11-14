@@ -33,7 +33,8 @@
     "fs": "^0.0.1-security",
     "mysql2": "^3.6.1",
     "prompt": "^1.3.0",
-    "prompt-sync-history": "^1.0.1"
+    "prompt-sync-history": "^1.0.1",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
